@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <title>Информация о пользователе</title>
+</head>
+<body>
+<h2>Информация о пользователе</h2>
+<form th:action="@{/admin/saveUser}" th:method="patch">
+  <input type="hidden" th:name="id" th:value="${user.id}"/>
+  <div class="container">
+    <label>1. Имя </label>
+    <input type="text" th:value="${user.name}" name="name" />
+  </div>
+  <br>
+  <div class="container">
+    <label>2. Фамилия </label>
+    <input type="text" th:value="${user.surname}" name="surname" />
+  </div>
+  <br>
+  <div class="container">
+    <label>3. Электронная почта </label>
+    <input type="text" th:value="${user.email}" name="email" />
+  </div>
+  <br>
+  <button type="submit">Сохранить и посмотреть общую таблицу</button>
+</form>
+</body>
+</html>
+
+<!--
+<form th:action="@{/addNewUser}" method="post">
+    <td><input type="text" th:placeholder="name" name="name" /></td>
+    <td><input type="text" th:placeholder="surname" name="surname" /></td>
+    <td><input type="text" th:placeholder="e-mail" name="email" /></td>
+    <td>
+        <div>
+            <button type="submit" th:value="Add">Add</button>
+        </div>
+    </td>
+</form>-->
