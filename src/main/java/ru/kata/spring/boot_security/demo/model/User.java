@@ -1,14 +1,18 @@
 package ru.kata.spring.boot_security.demo.model;
 
+import java.util.Collection;
+import java.util.Set;
 import javax.persistence.*;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 @Entity
-@Table(name="user_table")
-public class User{
+@Table(name="users")
+public class User implements UserDetails {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
     @Column(name="name")
@@ -17,8 +21,22 @@ public class User{
     @Column(name="surname")
     private String surname;
 
-    @Column(name="email")
+    @Column(name="username")
     private String email;
+
+    @Column(name="password")
+    private String password;
+
+    @Column(name="enabled")
+    private boolean enabled;
+
+    @Column(name="authority")
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "user_role",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id"))
+    private Set<Role> roles;
+
 
     public User() {
     }
@@ -70,5 +88,40 @@ public class User{
                 ", фамилия='" + surname + '\'' +
                 ", email='" + email + '\'' +
                 '}';
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return roles;
+    }
+
+    @Override
+    public String getPassword() {
+        return password;
+    }
+
+    @Override
+    public String getUsername() {
+        return email;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return false;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return false;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return false;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return enabled;
     }
 }
