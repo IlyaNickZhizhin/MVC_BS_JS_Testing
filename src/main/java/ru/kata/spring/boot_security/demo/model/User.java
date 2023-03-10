@@ -3,6 +3,8 @@ package ru.kata.spring.boot_security.demo.model;
 import java.util.Collection;
 import java.util.Set;
 import javax.persistence.*;
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -32,6 +34,7 @@ public class User implements UserDetails {
 
     @Column(name="authority")
     @ManyToMany(fetch = FetchType.LAZY)
+    @Cascade(CascadeType.ALL)
     @JoinTable(name = "user_role",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
@@ -140,6 +143,15 @@ public class User implements UserDetails {
     }
 
     public void setRoles(Set<Role> roles) {
+        this.roles = roles;
+    }
+
+    public User(String name, String surname, String email, String password, boolean enabled, Set<Role> roles) {
+        this.name = name;
+        this.surname = surname;
+        this.email = email;
+        this.password = password;
+        this.enabled = enabled;
         this.roles = roles;
     }
 }
