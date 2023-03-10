@@ -23,9 +23,31 @@
     <input type="text" th:value="${user.email}" name="email" />
   </div>
   <br>
+  <div class="checkbox">
+    <label>4.Роль</label>
+      <div th:each = "role:${roles}">
+        <input type="checkbox" th:field="${user.roles}" th:value ="${role.id}">
+        <label th:text="${role.authority.charAt(5)}"></label>
+      </div>
+  </div>
+  <br>
+  <div class="radio">
+    <label>5. Активность</label>
+    <input th:type="radio" th:checked="${user.enabled}" th:field="${user.enabled}" th:value="true"/>
+    </div>
+  <br>
+  <div class="container">
+    <label>6.Пароль</label>
+    <input type="password" th:value="${user.password}" name="password" />
+  </div>
   <button type="submit">Сохранить и посмотреть общую таблицу</button>
 </form>
 </body>
+
+<form th:action="@{/logout}" th:method="post">
+  <button type="submit" value="Logout">Выйти</button>
+</form>
+
 </html>
 
 <!--

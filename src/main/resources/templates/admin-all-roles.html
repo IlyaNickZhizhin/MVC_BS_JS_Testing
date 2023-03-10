@@ -1,0 +1,59 @@
+<!-- html страница, оформленная в шаблонизаторе Thymeleaf, которая загружается
+от метода showAllUsers из controller.WebAdminController
+и отображающая таблицу юзеров, на русском языке-->
+
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" lang="ru">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Таблица ролей</title>
+</head>
+<body>
+<table th:border="1">
+    <h2 th:align="center">Все роли</h2>
+    <thead>
+    <tr>
+        <th>№</th>
+        <th>Роль</th>
+        <th>Удаление</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="role : ${roles}">
+        <td th:text="${role.id}"></td>
+        <td th:text="${role.authority}"></td>
+        <td>
+            <div class="all-classes-container">
+                <form th:action="@{/admin/deleteRole}" th:method="delete">
+                    <input type="hidden" th:name="id" th:value="${role.id}"/>
+                    <button type="submit" value="Delete">Удалить</button>
+                </form>
+            </div>
+        </td>
+    </tr>
+    <tr>
+
+        <form th:action="@{/admin/addNewRole}" th:method="post">
+            <td></td>
+            <td><input type="text" th:placeholder="Role" name="authority"/></td>
+            <td>
+                <div>
+                    <button type="submit" th:value="Add">Добавить</button>
+                </div>
+            </td>
+        </form>
+    </tr>
+    </tbody>
+</table>
+
+</body>
+<!-- кнопка выхода из системы и перенаправления на страницу index-->
+
+<form th:action="@{/logout}" th:method="post">
+    <button type="submit" value="Logout">Выйти</button>
+</form>
+
+</html>
+
+

@@ -124,4 +124,22 @@ public class User implements UserDetails {
     public boolean isEnabled() {
         return enabled;
     }
+
+    //не ясно как без этого, явно лишнего кода
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+    }
+
+    public Set<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
+    }
 }

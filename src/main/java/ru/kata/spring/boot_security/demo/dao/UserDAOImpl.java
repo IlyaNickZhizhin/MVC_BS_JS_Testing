@@ -40,4 +40,11 @@ public class UserDAOImpl implements UserDAO{
         query.executeUpdate();
     }
 
+    @Override
+    public int getIdByEmail(String email) {
+        Query query = entityManager.createQuery("select id from User where email = :email");
+        query.setParameter("email", email);
+        return (int) query.getSingleResult();
+    }
+
 }

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <title>Информация о пользователе</title>
+</head>
+<body>
+<h2>Информация о пользователе</h2>
+<form th:action="@{/user/saveUser}" th:method="patch">
+  <input type="hidden" th:name="id" th:value="${user.id}"/>
+  <div class="container">
+    <label>1. Имя </label>
+    <input type="text" th:value="${user.name}" name="name" />
+  </div>
+  <br>
+  <div class="container">
+    <label>2. Фамилия </label>
+    <input type="text" th:value="${user.surname}" name="surname" />
+  </div>
+  <br>
+  <div class="container">
+    <label>3. Электронная почта </label>
+    <input type="text" th:value="${user.email}" name="email" />
+  </div>
+  <br>
+  <div class="container">
+    <label>4.Пароль</label>
+    <input type="password" th:value="${user.password}" name="password" />
+  </div>
+  <br>
+  <button type="submit">Сохранить изменения</button>
+</form>
+
+<form th:action="@{/user/deleteUser}" th:method="delete">
+  <input type="hidden" th:name="id" th:value="${user.id}"/>
+  <button type="submit">Удалить пользователя</button>
+</form>
+</body>
+
+<form th:action="@{/logout}" th:method="post">
+  <button type="submit" value="Logout">Выйти</button>
+</form>
+
+<form sec:authorize="hasRole('ROLE_ADMIN')" th:action="@{/admin}" th:method="get">
+ <button type="submit" value="AllUsers">На страницу администратора</button>
+</form>
+
+</html>
+
