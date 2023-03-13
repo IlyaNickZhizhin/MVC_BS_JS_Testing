@@ -3,13 +3,13 @@ package ru.kata.spring.boot_security.demo.dao;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
+import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import ru.kata.spring.boot_security.demo.model.User;
 
 @Repository
 public class UserDAOImpl implements UserDAO{
-
 
     private final EntityManager entityManager;
 

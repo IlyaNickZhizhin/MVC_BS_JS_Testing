@@ -1,23 +1,24 @@
 package ru.kata.spring.boot_security.demo.configs;
 
-import javax.sql.DataSource;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import ru.kata.spring.boot_security.demo.service.UserService;
 
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final SuccessUserHandler successUserHandler;
-    private final DataSource dataSource;
+    /*private final DataSource dataSource;*/
+    private final UserService userService;
 
-    public WebSecurityConfig(SuccessUserHandler successUserHandler, DataSource dataSource) {
+    public WebSecurityConfig(SuccessUserHandler successUserHandler, /*DataSource dataSource*/ UserService userService) {
         this.successUserHandler = successUserHandler;
-        this.dataSource = dataSource;
+        this.userService = userService;
     }
 
     @Override
@@ -38,21 +39,25 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     // аутентификация в базе данных с учетом того, что пароли зашифрованы bcrypt
 
-
-
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.jdbcAuthentication().dataSource(dataSource)
-                .usersByUsernameQuery("SELECT username, password, enabled FROM users WHERE username = ?")
-                .authoritiesByUsernameQuery
-                        ("SELECT u.username, a.authority " +
-                        "FROM users u " +
-                        "INNER JOIN user_role ur ON u.id = ur.user_id " +
-                        "INNER JOIN authorities a ON ur.role_id = a.id " +
-                        "WHERE u.username = ?"
-                        )
-                .passwordEncoder(new BCryptPasswordEncoder());
+        auth.userDetailsService(userService).passwordEncoder(new BCryptPasswordEncoder());
     }
+
+
+//    @Override
+//    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+//        auth.jdbcAuthentication().dataSource(dataSource)
+//                .usersByUsernameQuery("SELECT username, password, enabled FROM users WHERE username = ?")
+//                .authoritiesByUsernameQuery
+//                        ("SELECT u.username, a.authority " +
+//                        "FROM users u " +
+//                        "INNER JOIN user_role ur ON u.id = ur.user_id " +
+//                        "INNER JOIN authorities a ON ur.role_id = a.id " +
+//                        "WHERE u.username = ?"
+//                        )
+//                .passwordEncoder(new BCryptPasswordEncoder());
+//    }
 
     // аутентификация inMemory
 //    @Bean

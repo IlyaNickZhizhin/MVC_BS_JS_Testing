@@ -25,15 +25,11 @@ TestUserDataLoader {
 
     @PostConstruct
     public void init() {
-        Role admin = new Role("ROLE_ADMIN");
-        Role user = new Role("ROLE_USER");
-        roleService.saveRole(admin);
-        roleService.saveRole(user);
         userService.saveUser(new User("One", "One", "one@mail.ru",
-                encoder.encode("one"), true, Set.of(admin)));
+                encoder.encode("one"), true, Set.of(new Role("ROLE_ADMIN"))));
         userService.saveUser(new User("Two", "Two", "two@mail.ru",
-                encoder.encode("two"), true, Set.of(user)));
+                encoder.encode("two"), true, Set.of(new Role("ROLE_USER"))));
         userService.saveUser(new User("Three", "Three", "three@mail.ru",
-                encoder.encode("three"), true, Set.of(user, admin)));
+                encoder.encode("three"), true, Set.copyOf(roleService.getAllRoles())));
     }
 }

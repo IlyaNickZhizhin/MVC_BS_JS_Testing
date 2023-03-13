@@ -1,9 +1,14 @@
 package ru.kata.spring.boot_security.demo.model;
 
 import java.util.Set;
-import javax.persistence.*;
-import org.hibernate.annotations.Cascade;
-import org.hibernate.annotations.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToMany;
+import javax.persistence.Table;
+import javax.persistence.Column;
+
 import org.springframework.security.core.GrantedAuthority;
 
 @Entity
@@ -19,7 +24,6 @@ public class Role implements GrantedAuthority {
     private String authority;
 
     @ManyToMany(mappedBy = "roles")
-    @Cascade(CascadeType.ALL)
     private Set<User> users;
 
     @Override
@@ -49,7 +53,7 @@ public class Role implements GrantedAuthority {
 
     @Override
     public String toString() {
-        return "Role{" + authority + "}";
+        return authority;
     }
 
     public Role(String authority) {
