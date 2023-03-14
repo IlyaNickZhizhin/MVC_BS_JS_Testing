@@ -1,35 +1,58 @@
-<!-- html страница, оформленная в шаблонизаторе Thymeleaf, которая загружается
-от метода showAllUsers из controller.WebAdminController
-и отображающая таблицу юзеров, на русском языке-->
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3"
       lang="ru">
 <head>
     <meta charset="UTF-8" />
-    <title>Таблица администратора</title>
+    <title>Панель администратора</title>
 </head>
 <body>
-<table th:border="1">
-    <h2 th:align="center">Все пользователи</h2>
+<div style="display: flex; justify-content: space-between; align-items: center">
+    <div>
+        <span th:text="${current.username}" style="font-weight: bolder"></span>
+        <span> with roles: </span>
+        <span th:text="${current.roles}"></span>
+    </div>
+    <div>
+        <form th:action="@{/logout}" th:method="post">
+            <button type="submit" value="Logout">Выйти</button>
+        </form>
+    </div>
+</div>
+<h2>Панель администратора</h2>
+<div>
+    <a href="/admin" th:method="get" style="color:black" >Пользователи</a>
+    <a href="/admin/addNewUser" th:method="get" style="color:blue">Добавить</a>
+</div>
+<table th:border="1" style="width: 60%">
+    <h4>Все пользователи</h4>
     <thead>
     <tr>
+        <th>ID</th>
         <th>Имя</th>
         <th>Фамилия</th>
         <th>Электронная почта</th>
-        <th>Действия</th>
+        <th>Роль</th>
+        <th>Изменить</th>
+        <th>Удалить</th>
     </tr>
     </thead>
     <tbody>
     <tr th:each="user : ${users}">
+        <td th:text="${user.id}"></td>
         <td th:text="${user.name}"></td>
         <td th:text="${user.surname}"></td>
         <td th:text="${user.email}"></td>
+        <td th:text="${user.roles}"></td>
         <td>
             <div class="all-classes-container">
                 <form th:action="@{/admin/showUserById}" th:method="get">
                     <input type="hidden" th:name="id" th:value="${user.id}"/>
                     <button type="submit" value="Edit">Изменить</button>
                 </form>
+            </div>
+        </td>
+        <td>
+            <div class="all-classes-container">
                 <form th:action="@{/admin/deleteUser}" th:method="delete">
                     <input type="hidden" th:name="id" th:value="${user.id}"/>
                     <button type="submit" value="Delete">Удалить</button>
@@ -37,30 +60,13 @@
             </div>
         </td>
     </tr>
-    <tr>
-
-        <form th:action="@{/admin/addNewUser}" th:method="post">
-            <td><input type="text" th:placeholder="name" name="name" /></td>
-            <td><input type="text" th:placeholder="surname" name="surname" /></td>
-            <td><input type="text" th:placeholder="e-mail" name="email" /></td>
-            <td>
-                <div>
-                    <button type="submit" th:value="Add">Добавить</button>
-                </div>
-            </td>
-        </form>
-    </tr>
     </tbody>
 </table>
 
 </body>
-
-<form th:action="@{/logout}" th:method="post">
-    <button type="submit" value="Logout">Выйти</button>
-</form>
-
+<br>
 <form sec:authorize access="hasRole('ROLE_USER')" th:action="@{/user/}" th:method="get">
-    <input type="hidden" th:name="id" th:value="${ID}"/>
+    <input type="hidden" th:name="id" th:value="${current.id}"/>
     <button type="submit" value="Logout">На страницу юзера</button>
 </form>
 

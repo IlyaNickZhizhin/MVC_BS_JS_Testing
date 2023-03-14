@@ -36,27 +36,38 @@ public class WebAdminController {
     public String showAllUsers(Model model, Authentication au) {
         List<User> userList = userService.getAllUsers();
         model.addAttribute("users", userList);
-        model.addAttribute("ID", getUserID(au));
+        model.addAttribute("current", getUser(au));
         return "/admin-all-users";
     }
 
-    @PostMapping(value = "/admin/addNewUser")
-    public String addNewUser(@ModelAttribute("newUser") User user) {
-        userService.saveUser(user);
-        return "redirect:/admin";
+    @GetMapping (value = "/admin/addNewUser")
+    public String addNewUser(Model model, Authentication au) {
+        User user = new User();
+        model.addAttribute("user", user);
+        model.addAttribute("roles", roleService.getAllRoles());
+        model.addAttribute("current", getUser(au));
+        return "/admin-user-info";
     }
 
     @GetMapping("/admin/showUserById")
     public String showUserById(@RequestParam("id") int id,
-                             Model model) {
+                             Model model, Authentication au) {
         model.addAttribute("user", userService.getUserById(id));
         model.addAttribute("roles", roleService.getAllRoles());
+        model.addAttribute("current", getUser(au));
         return "/admin-user-info";
     }
     @PatchMapping("/admin/saveUser")
     public String updateUser(@ModelAttribute("changedUser") User user) {
         String pass = user.getPassword();
         int id = user.getId();
+        if(userService.getUserById(id)==null) {
+            BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+            String hashedPass = passwordEncoder.encode(pass);
+            user.setPassword(hashedPass);
+            userService.saveUser(user);
+            return "redirect:/admin";
+        }
         if (!pass.equals(userService.getUserById(id).getPassword())) {
             BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
             String hashedPass = passwordEncoder.encode(pass);
@@ -93,18 +104,13 @@ public class WebAdminController {
         return "redirect:/admin/roles";
     }
 
-    @GetMapping("/userspace")
-    public String showUserPage(@RequestParam(name = "id") int id) {
-        return "/user/?id=" + id;
-    }
-
-    private int getUserID(Authentication authentication) {
+    private User getUser(Authentication authentication) {
         Object principal = authentication.getPrincipal();
         if (principal instanceof UserDetails) {
             String username = ((UserDetails) principal).getUsername();
-            return userService.getIdByEmail(username);
+            return userService.getUserByEmail(username);
         }
-        return 0;
+        return null;
     }
 
 }

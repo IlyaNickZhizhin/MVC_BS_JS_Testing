@@ -25,11 +25,17 @@ TestUserDataLoader {
 
     @PostConstruct
     public void init() {
-        userService.saveUser(new User("One", "One", "one@mail.ru",
-                encoder.encode("one"), true, Set.of(new Role("ROLE_ADMIN"))));
-        userService.saveUser(new User("Two", "Two", "two@mail.ru",
-                encoder.encode("two"), true, Set.of(new Role("ROLE_USER"))));
-        userService.saveUser(new User("Three", "Three", "three@mail.ru",
-                encoder.encode("three"), true, Set.copyOf(roleService.getAllRoles())));
+        if (userService.getAllUsers().size()==0) {
+            userService.saveUser(new User("Ilya", "Zhizhin", "ilya@mail.ru",
+                    encoder.encode("ilya"), true, Set.of(new Role("ROLE_ADMIN"))));
+            userService.saveUser(new User("Irina", "Zhizhina", "irina@mail.ru",
+                    encoder.encode("irina"), true, Set.of(new Role("ROLE_USER"))));
+            userService.saveUser(new User("Stepan", "Pozdeev", "stepan@mail.ru",
+                    encoder.encode("stepan"), true, Set.copyOf(roleService.getAllRoles())));
+            userService.saveUser(new User("Michail", "Pozdeev", "misha@mail.ru",
+                    encoder.encode("misha"), false, Set.of(roleService.getRoleById(2))));
+            userService.saveUser(new User("Mark", "Zhizhin", "mark@mail.ru",
+                    encoder.encode("mark"), false, Set.of(roleService.getRoleById(1))));
+        }
     }
 }

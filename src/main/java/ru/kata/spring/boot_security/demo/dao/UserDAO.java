@@ -13,6 +13,8 @@ public interface UserDAO {
 
     void deleteUser(int id);
 
-    int getIdByEmail(String email);
+    User getUserByEmail(String email);
+
+    User getUserByEmailWithRoles(String email);
 
 }

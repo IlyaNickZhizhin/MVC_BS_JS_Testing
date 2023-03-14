@@ -1,11 +1,7 @@
 package ru.kata.spring.boot_security.demo.service;
 
 import java.util.List;
-import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.kata.spring.boot_security.demo.dao.UserDAO;
@@ -39,19 +35,6 @@ public class UserServiceImpl implements UserService {
         return userDAO.getUserById(id);
     }
 
-    @Transactional
-    @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        int id = userDAO.getIdByEmail(username);
-        User MyUser = userDAO.getUserById(id);
-        Hibernate.initialize(MyUser.getRoles());
-        UserDetails user = org.springframework.security.core.userdetails.User.builder()
-                .username(MyUser.getUsername())
-                .password(MyUser.getPassword())
-                .roles("ADMIN")
-                .build();
-        return getUserById(id);
-    }
 
     @Transactional
     @Override
@@ -61,8 +44,8 @@ public class UserServiceImpl implements UserService {
 
     @Transactional
     @Override
-    public int getIdByEmail(String email) {
-        return userDAO.getIdByEmail(email);
+    public User getUserByEmail(String email) {
+        return userDAO.getUserByEmail(email);
     }
 
 

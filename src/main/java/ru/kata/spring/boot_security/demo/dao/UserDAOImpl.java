@@ -3,7 +3,6 @@ package ru.kata.spring.boot_security.demo.dao;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
-import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import ru.kata.spring.boot_security.demo.model.User;
@@ -41,10 +40,19 @@ public class UserDAOImpl implements UserDAO{
     }
 
     @Override
-    public int getIdByEmail(String email) {
-        Query query = entityManager.createQuery("select id from User where email = :email");
-        query.setParameter("email", email);
-        return (int) query.getSingleResult();
+    public User getUserByEmail(String email) {
+       return entityManager.createQuery("from User where email = :email", User.class)
+                .setParameter("email", email)
+                .getSingleResult();
     }
 
+    @Override
+    public User getUserByEmailWithRoles(String email) {
+        String query = "select distinct u from User u "
+                + "left join fetch u.roles "
+                + "where u.email = :email";
+        return entityManager.createQuery(query, User.class)
+                .setParameter("email", email)
+                .getSingleResult();
+    }
 }

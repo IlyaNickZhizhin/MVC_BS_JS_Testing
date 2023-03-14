@@ -42,7 +42,7 @@ public class SuccessUserHandler implements AuthenticationSuccessHandler {
         Object principal = authentication.getPrincipal();
         if (principal instanceof UserDetails) {
             String username = ((UserDetails) principal).getUsername();
-            return userService.getIdByEmail(username);
+            return userService.getUserByEmail(username).getId();
         }
         return 0;
     }
