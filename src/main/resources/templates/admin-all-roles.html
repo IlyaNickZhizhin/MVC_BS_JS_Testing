@@ -16,6 +16,19 @@
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
         integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
         crossorigin="anonymous"></script>
+<div class="p-3 bg-dark text-white" style="display: flex; justify-content: space-between; align-items: center">
+    <div>
+        <span th:text="${current.username}" style="font-weight: bolder"></span>
+        <span> with roles: </span>
+        <span th:text="${current.roles}"></span>
+    </div>
+    <div>
+        <form th:action="@{/logout}" th:method="post">
+            <a href="/logout" th:method="post" style="color: dimgrey">Logout</a>
+        </form>
+    </div>
+</div>
+
 <table th:border="1">
     <h2 th:align="center">Все роли</h2>
     <thead>
