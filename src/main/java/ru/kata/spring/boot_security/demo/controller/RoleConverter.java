@@ -17,7 +17,6 @@ public class RoleConverter implements Converter<String, Role>{
     @Override
     public Role convert(String id) {
         Role role = roleService.getRoleById(Integer.parseInt(id));
-        /*System.out.println("ПОЛУЧЕНО: \"" + id + "\" и конвертировано в " + role.getAuthority());*/
         return role;
     }
 }
