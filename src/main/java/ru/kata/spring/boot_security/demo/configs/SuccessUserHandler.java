@@ -7,7 +7,6 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.AuthorityUtils;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
 import ru.kata.spring.boot_security.demo.service.UserService;
@@ -32,18 +31,9 @@ public class SuccessUserHandler implements AuthenticationSuccessHandler {
             httpServletResponse.sendRedirect("/admin");
         } else
         if (roles.contains("ROLE_USER")) {
-            httpServletResponse.sendRedirect("/user/?id="+getUserID(authentication));
+            httpServletResponse.sendRedirect("/user/");
         } else {
             httpServletResponse.sendRedirect("/");
         }
-    }
-
-     private int getUserID(Authentication authentication) {
-        Object principal = authentication.getPrincipal();
-        if (principal instanceof UserDetails) {
-            String username = ((UserDetails) principal).getUsername();
-            return userService.getUserByEmail(username).getId();
-        }
-        return 0;
     }
 }

@@ -23,20 +23,9 @@ public class RoleServiceImpl implements RoleService{
         return roleDAO.getAllRoles();
     }
 
-    @Transactional
-    @Override
-    public void saveRole(Role role) {
-        roleDAO.saveRole(role);
-    }
-
     @Override
     public Role getRoleById(int id) {
         return roleDAO.getRoleById(id);
     }
 
-    @Transactional
-    @Override
-    public void deleteRole(int id) {
-        roleDAO.deleteRole(id);
-    }
 }

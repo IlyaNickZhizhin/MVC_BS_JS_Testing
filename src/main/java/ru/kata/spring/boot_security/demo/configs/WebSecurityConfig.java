@@ -13,10 +13,9 @@ import ru.kata.spring.boot_security.demo.service.UserDetailsServiceImpl;
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final SuccessUserHandler successUserHandler;
-    /*private final DataSource dataSource;*/
     private final UserDetailsServiceImpl userService;
 
-    public WebSecurityConfig(SuccessUserHandler successUserHandler, /*DataSource dataSource*/ UserDetailsServiceImpl userService) {
+    public WebSecurityConfig(SuccessUserHandler successUserHandler, UserDetailsServiceImpl userService) {
         this.successUserHandler = successUserHandler;
         this.userService = userService;
     }
@@ -44,4 +43,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(userService).passwordEncoder(new BCryptPasswordEncoder());
     }
+
+
 }

@@ -1,11 +1,10 @@
 package ru.kata.spring.boot_security.demo.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
-import ru.kata.spring.boot_security.demo.model.User;
+import org.springframework.web.bind.annotation.GetMapping;
 import ru.kata.spring.boot_security.demo.service.UserService;
 
 @Controller
@@ -19,31 +18,9 @@ public class WebUserController {
     }
 
     @GetMapping("/user/")
-    public String showUserById(@RequestParam("id") int id,
+    public String showUserById(Authentication au,
                                Model model) {
-        model.addAttribute("user", userService.getUserById(id));
-        return "/user-info";
+        model.addAttribute("current", au.getPrincipal());
+        return "user";
     }
-
-    @PatchMapping("/user/saveUser")
-    public String updateUser(@ModelAttribute User user) {
-        String pass = user.getPassword();
-        int id = user.getId();
-        user.setRoles(userService.getUserById(id).getRoles());
-        user.setEnabled(userService.getUserById(id).isEnabled());
-        if (!pass.equals(userService.getUserById(id).getPassword())) {
-            BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-            String hashedPass = passwordEncoder.encode(pass);
-            user.setPassword(hashedPass);
-        }
-        userService.saveUser(user);
-        return "redirect:/user/?id=" + id;
-    }
-
-    @DeleteMapping(value = "/user/deleteUser")
-    public String deleteUser(@RequestParam("id") int id) {
-        userService.deleteUser(id);
-        return "redirect:/user/";
-    }
-
 }
