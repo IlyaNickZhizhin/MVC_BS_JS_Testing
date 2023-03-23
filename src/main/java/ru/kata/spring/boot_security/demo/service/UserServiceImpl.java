@@ -38,7 +38,6 @@ public class UserServiceImpl implements UserService {
             return;
         }
         if (!pass.equals(userDAO.getUserById(id).getPassword())) {
-            BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
             String hashedPass = passwordEncoder.encode(pass);
             user.setPassword(hashedPass);
         }
