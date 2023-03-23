@@ -11,7 +11,7 @@ import ru.kata.spring.boot_security.demo.model.Role;
 @Transactional(readOnly = true)
 public class RoleServiceImpl implements RoleService{
 
-    RoleDAO roleDAO;
+    private final RoleDAO roleDAO;
 
     @Autowired
     public RoleServiceImpl(RoleDAO roleDAO) {

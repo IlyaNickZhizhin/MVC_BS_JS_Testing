@@ -2,6 +2,7 @@ package ru.kata.spring.boot_security.demo.service;
 
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.kata.spring.boot_security.demo.dao.UserDAO;
@@ -12,10 +13,12 @@ import ru.kata.spring.boot_security.demo.model.User;
 public class UserServiceImpl implements UserService {
 
     private final UserDAO userDAO;
+    private final BCryptPasswordEncoder passwordEncoder;
 
     @Autowired
     public UserServiceImpl(UserDAO userDAO) {
         this.userDAO = userDAO;
+        this.passwordEncoder = new BCryptPasswordEncoder();
     }
 
     @Override
@@ -26,6 +29,19 @@ public class UserServiceImpl implements UserService {
     @Transactional
     @Override
     public void saveUser(User user) {
+        String pass = user.getPassword();
+        int id = user.getId();
+        if (userDAO.getUserById(id) == null) {
+            String hashedPass = passwordEncoder.encode(pass);
+            user.setPassword(hashedPass);
+            userDAO.saveUser(user);
+            return;
+        }
+        if (!pass.equals(userDAO.getUserById(id).getPassword())) {
+            BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+            String hashedPass = passwordEncoder.encode(pass);
+            user.setPassword(hashedPass);
+        }
         userDAO.saveUser(user);
     }
 
@@ -36,7 +52,6 @@ public class UserServiceImpl implements UserService {
     }
 
 
-    @Transactional
     @Override
     public void deleteUser(int id) {
         userDAO.deleteUser(id);

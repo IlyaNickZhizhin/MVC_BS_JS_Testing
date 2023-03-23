@@ -4,22 +4,13 @@ import java.io.IOException;
 import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
-import ru.kata.spring.boot_security.demo.service.UserService;
 
 @Component
 public class SuccessUserHandler implements AuthenticationSuccessHandler {
-
-    UserService userService;
-
-    @Autowired
-    public SuccessUserHandler(UserService userService) {
-        this.userService = userService;
-    }
 
     // Spring Security использует объект Authentication, пользователя авторизованной сессии.
     @Override
