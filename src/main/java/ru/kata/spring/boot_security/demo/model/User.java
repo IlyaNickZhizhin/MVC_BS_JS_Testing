@@ -134,7 +134,7 @@ public class User implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return enabled;
+        return true;
     }
 
     //не ясно как без этого, явно лишнего кода

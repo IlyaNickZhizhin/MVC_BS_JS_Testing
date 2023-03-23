@@ -7,12 +7,11 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.kata.spring.boot_security.demo.dao.UserDAO;
-import ru.kata.spring.boot_security.demo.model.User;
 
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
 
-    UserDAO userDAO;
+    private final UserDAO userDAO;
 
     @Autowired
     public UserDetailsServiceImpl(UserDAO userDAO) {
@@ -23,8 +22,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         try {
-            User MyUser = userDAO.getUserByEmailWithRoles(username);
-            return MyUser;
+            return userDAO.getUserByEmailWithRoles(username);
         } catch (Exception e) {
             throw new UsernameNotFoundException("User not found");
         }

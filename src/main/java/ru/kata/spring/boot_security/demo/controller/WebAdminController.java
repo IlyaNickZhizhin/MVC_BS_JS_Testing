@@ -3,13 +3,10 @@ package ru.kata.spring.boot_security.demo.controller;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -50,20 +47,6 @@ public class WebAdminController {
 
     @PatchMapping("/admin/saveUser")
     public String updateUser(@ModelAttribute("changedUser") User user) {
-        String pass = user.getPassword();
-        int id = user.getId();
-        if(userService.getUserById(id)==null) {
-            BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-            String hashedPass = passwordEncoder.encode(pass);
-            user.setPassword(hashedPass);
-            userService.saveUser(user);
-            return "redirect:/admin";
-        }
-        if (!pass.equals(userService.getUserById(id).getPassword())) {
-            BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-            String hashedPass = passwordEncoder.encode(pass);
-            user.setPassword(hashedPass);
-        }
         userService.saveUser(user);
         return "redirect:/admin";
     }
