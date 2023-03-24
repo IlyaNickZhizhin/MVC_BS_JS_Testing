@@ -44,13 +44,13 @@ public class UserServiceImpl implements UserService {
         userDAO.saveUser(user);
     }
 
-    @Transactional
+
     @Override
     public User getUserById(int id) {
         return userDAO.getUserById(id);
     }
 
-
+    @Transactional
     @Override
     public void deleteUser(int id) {
         userDAO.deleteUser(id);
