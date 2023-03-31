@@ -16,9 +16,9 @@ public class UserServiceImpl implements UserService {
     private final BCryptPasswordEncoder passwordEncoder;
 
     @Autowired
-    public UserServiceImpl(UserDAO userDAO) {
+    public UserServiceImpl(UserDAO userDAO, BCryptPasswordEncoder passwordEncoder) {
         this.userDAO = userDAO;
-        this.passwordEncoder = new BCryptPasswordEncoder();
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
@@ -29,29 +29,26 @@ public class UserServiceImpl implements UserService {
     @Transactional
     @Override
     public void saveUser(User user) {
-        String pass = user.getPassword();
+        System.out.println("4SAVING"+user);
         int id = user.getId();
-        if (userDAO.getUserById(id) == null) {
-            String hashedPass = passwordEncoder.encode(pass);
+        User existingUser = userDAO.getUserById(id);
+        System.out.println("EXISTING"+existingUser);
+        if (existingUser == null) {
+            String hashedPass = passwordEncoder.encode(user.getPassword());
             user.setPassword(hashedPass);
-            userDAO.saveUser(user);
-            return;
-        }
-        if (!pass.equals(userDAO.getUserById(id).getPassword())) {
-            BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-            String hashedPass = passwordEncoder.encode(pass);
+        } else if (!existingUser.getPassword().equals(user.getPassword())) {
+            String hashedPass = passwordEncoder.encode(user.getPassword());
             user.setPassword(hashedPass);
         }
         userDAO.saveUser(user);
     }
 
-    @Transactional
     @Override
     public User getUserById(int id) {
         return userDAO.getUserById(id);
     }
 
-
+    @Transactional
     @Override
     public void deleteUser(int id) {
         userDAO.deleteUser(id);

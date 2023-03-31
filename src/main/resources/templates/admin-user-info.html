@@ -1,11 +1,12 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3"
       lang="ru">
 <head>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
-          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <meta charset="UTF-8"/>
-    <title>Панель администратора</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <meta charset="UTF-8"/>
+  <title>Панель администратора</title>
 </head>
 <body>
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
@@ -17,71 +18,96 @@
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
         integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
         crossorigin="anonymous"></script>
-<div style="display: flex; justify-content: space-between; align-items: center">
-    <div>
-        <span th:text="${current.username}" style="font-weight: bolder"></span>
-        <span> with roles: </span>
-        <span th:text="${current.roles}"></span>
+<nav class="navbar navbar-dark bg-dark text-white fixed-top"
+     style="display: flex; justify-content: space-between; align-items: center">
+  <div>
+    <span th:text="${current.username}" style="font-weight: bolder"></span>
+    <span> with roles: </span>
+    <span th:text="${current.authorities}"></span>
+  </div>
+  <div>
+    <form th:action="@{/logout}" th:method="post">
+      <a href="/logout" th:method="post" style="color: grey">Logout</a>
+    </form>
+  </div>
+</nav>
+<div class="p-3"></div>
+<div class="p-2 bg-dark text-white">
+</div>
+<div class="row">
+  <div class="col-2 nav-pills p-1 m-0">
+    <nav sec:authorize="hasRole('ROLE_ADMIN')" class="nav-link active">
+      <form th:action="@{/admin/}" th:method="get">
+        <a href="/admin" th:method="get" style="color: white">АДМИНИСТРАТОР</a>
+      </form>
+    </nav>
+    <nav sec:authorize="hasRole('ROLE_USER')" class="nav-link">
+      <form th:action="@{/user/}" th:method="get">
+        <a href="/user/" th:method="get">ПОЛЬЗОВАТЕЛЬ</a>
+      </form>
+    </nav>
+  </div>
+  <div class="col-sm-10 p-4 bg-light text-dark border">
+    <h2 style="font-weight: bolder">Панель администратора</h2>
+
+    <ui class="nav nav-tabs">
+      <li class="nav-item">
+        <a class="nav-link" href="/admin" th:method="get" style="color:blue">Пользователи</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link active" href="/admin/addNewUser" th:method="get" style="color:black">Добавить</a>
+      </li>
+    </ui>
+
+    <div class="row p-3 border bg-light w-90">
+      <h5 class="table table-striped table-borderless w-90" style="font-weight: bold">
+        Добавление нового пользователя
+      </h5>
     </div>
-    <div>
-        <form th:action="@{/logout}" th:method="post">
-            <button type="submit" value="Logout">Выйти</button>
+    <div class="row justify-content-center border p-3 bg-white w-98">
+      <div class="col-4 p-2">
+        <form class="needs-validation" th:action="@{/admin/saveUser}" th:method="patch">
+          <input type="hidden" th:name="id" th:value="${user.id}"/>
+          <div class="form-group">
+            <p class="text-center my-0"><strong> Имя </strong></p>
+            <input class="form-control mt-0" placeholder="Имя" type="text" th:value="${user.name}" name="name"
+                   required/>
+          </div>
+          <div class="form-group align-items-center justify-content-center">
+            <p class="text-center my-0"><strong> Фамилия </strong></p>
+            <input class="form-control mt-0" placeholder="Фамилия" type="text" th:value="${user.surname}" name="surname"
+                   required/>
+          </div>
+          <div class="form-group">
+            <p class="text-center my-0"><strong> Электронная почта </strong></p>
+            <input class="form-control mt-0" placeholder="user@email.com" type="text" th:value="${user.username}"
+                   name="email" required/>
+          </div>
+          <div class="form-group">
+            <p class="text-center my-0"><strong> Пароль</strong></p>
+            <div>
+              <input class="form-control w-100 mt-0" type="password" th:value="${user.password}" name="password"/>
+            </div>
+          </div>
+          <div class="form-group">
+            <p class="text-center my-0"><strong> Роль</strong></p>
+            <select multiple class="form-control p-0 m-0" id="roles" name="roles">
+              <option
+                      th:each="role:${roles}" th:value="${role.id}"
+                      th:text="${role.authority.substring(5)}">
+              </option>
+            </select>
+          </div>
+          <div class="d-flex justify-content-center">
+            <button type="submit" class="btn btn-success">Сохранить</button>
+          </div>
         </form>
+      </div>
     </div>
+  </div>
 </div>
-<h2>Панель администратора</h2>
-<div>
-    <a href="/admin" th:method="get" style="color:blue">Пользователи</a>
-    <a href="/admin/addNewUser" th:method="get" style="color:black">Добавить</a>
-</div>
-<h4>Информация о пользователе</h4>
-<form th:action="@{/admin/saveUser}" th:method="patch" style="float: left">
-    <input type="hidden" th:name="id" th:value="${user.id}"/>
-    <div class="container">
-        <label> Имя </label>
-        <div>
-            <input type="text" th:value="${user.name}" name="name"/>
-        </div>
-    </div>
-    <br>
-    <div class="container">
-        <label> Фамилия </label>
-        <div>
-            <input type="text" th:value="${user.surname}" name="surname"/>
-        </div>
-    </div>
-    <br>
-    <div class="container">
-        <label> Электронная почта </label>
-        <div>
-            <input type="text" th:value="${user.email}" name="email"/>
-        </div>
-    </div>
-    <br>
-    <div class="checkbox">
-        <label> Роль</label>
-        <div th:each="role:${roles}">
-            <input type="checkbox" th:field="${user.roles}" th:value="${role.id}">
-            <label th:text="${role.authority.charAt(5)}"></label>
-        </div>
-    </div>
-    <br>
-    <div class="container">
-        <label> Пароль</label>
-        <div>
-            <input type="password" th:value="${user.password}" name="password"/>
-        </div>
-    </div>
-    <br>
-    <div class="radio">
-        <label> Активность</label>
-        <div>
-            <input th:type="radio" th:checked="${user.enabled}" th:field="${user.enabled}" th:value="true"/>
-        </div>
-    </div>
-    <br>
-    <button type="submit">Сохранить</button>
-    <br>
-</form>
 </body>
 </html>
+
+
+<!---->
