@@ -48,7 +48,7 @@
             </form>
         </nav>
     </div>
-    <div class="col-sm-10 p-4 bg-light text-dark border">
+    <div class="container shadow-lg p3 bg-body rounded">
         <h2 style="font-weight: bolder">Панель администратора</h2>
 
         <ui class="nav nav-tabs">
@@ -56,16 +56,16 @@
                 <a class="nav-link active" href="/admin" th:method="get" style="color:black">Пользователи</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="/admin/addNewUser" th:method="get" style="color:blue">Добавить</a>
+                <a class="nav-link" href="/admin/addNewUser4DB" th:method="get" style="color:blue">Добавить</a>
             </li>
         </ui>
 
-        <div class="row p-2 border bg-light">
+        <div class="container shadow-lg p3 bg-body rounded">
             <h5 style="font-weight: bold">
                 Все пользователи
             </h5>
         </div>
-        <div class="row border bg-white">
+        <div class="container shadow-lg p3 mb-5 bg-body rounded">
             <table class="table bg-white table-striped table-borderless border-top w-90">
                 <thead>
                 <tr>
@@ -78,161 +78,78 @@
                     <th>Удалить</th>
                 </tr>
                 </thead>
-                <tbody>
-                <tr th:each="user : ${users}">
-                    <td th:text="${user.id}"></td>
-                    <td th:text="${user.name}"></td>
-                    <td th:text="${user.surname}"></td>
-                    <td th:text="${user.username}"></td>
-                    <td th:text="${user.authorities}"></td>
-                    <td>
-                        <div class="all-classes-container">
-                            <button type="button" class="btn btn-primary btn-sm" data-toggle="modal"
-                                    th:data-target="${'#changeModal' + user.id}">
-                                Изменить
-                            </button>
-
-                            <form class="modal fade" th:id="${'changeModal'+user.id}" tabindex="-1" role="dialog"
-                                  aria-labelledby="changeModalLabel" aria-hidden="true"
-                                  th:action="@{/admin/saveUser}" th:method="patch">
-                                <div class="modal-dialog" role="document">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h5 class="modal-title" id="changeModalLabel">Корректировка данных
-                                                пользователя</h5>
-                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                <span aria-hidden="true">&times;</span>
-                                            </button>
-                                        </div>
-                                        <form class="modal-body">
-                                            <div class="row">
-                                                <div class="col-3"></div>
-                                                <div class="col-6">
-                                                    <input type="hidden" th:name="id" th:value="${user.id}"/>
-                                                    <div class="form-group">
-                                                        <p class="text-center my-0"><strong> Имя </strong></p>
-                                                        <input class="form-control mt-0" placeholder="Имя" type="text"
-                                                               th:value="${user.name}" name="name" required/>
-                                                    </div>
-                                                    <div class="form-group align-items-center justify-content-center">
-                                                        <p class="text-center my-0"><strong> Фамилия </strong></p>
-                                                        <input class="form-control mt-0" placeholder="Фамилия"
-                                                               type="text" th:value="${user.surname}" name="surname"
-                                                               required/>
-                                                    </div>
-                                                    <div class="form-group">
-                                                        <p class="text-center my-0"><strong> Электронная почта </strong>
-                                                        </p>
-                                                        <input class="form-control mt-0" placeholder="user@email.com"
-                                                               type="text" th:value="${user.username}"
-                                                               name="email" required/>
-                                                    </div>
-                                                    <div class="form-group">
-                                                        <p class="text-center my-0"><strong> Пароль</strong></p>
-                                                        <div>
-                                                            <input class="form-control w-100 mt-0" type="password"
-                                                                   th:value="${user.password}" name="password"/>
-                                                        </div>
-                                                    </div>
-                                                    <div class="form-group">
-                                                        <p class="text-center my-0"><strong> Роль</strong></p>
-                                                        <select multiple class="form-control p-0 m-0" id="roles"
-                                                                name="roles" th:value="${user.authorities}">
-                                                            <option
-                                                                    th:each="role:${roles}" th:value="${role.id}"
-                                                                    th:text="${role.authority.substring(5)}">
-                                                            </option>
-                                                        </select>
-                                                    </div>
-                                                </div>
-                                                <div class="col-3"></div>
-                                            </div>
-                                        </form>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">
-                                                Закрыть
-                                            </button>
-                                            <button type="submit" class="btn btn-primary">Сохранить</button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </form>
-                        </div>
-                    </td>
-                    <td>
-                        <div class="all-classes-container">
-                            <button type="button" class="btn btn-danger btn-sm" data-toggle="modal"
-                                    th:data-target="${'#deleteModal' + user.id}">
-                                Удалить
-                            </button>
-
-                            <form class="modal fade" th:id="${'deleteModal'+user.id}" tabindex="-1" role="dialog"
-                                  aria-labelledby="deleteModalLabel" aria-hidden="true"
-                                  th:action="@{/admin/deleteUser}" th:method="delete">
-                                <div class="modal-dialog" role="document">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h5 class="modal-title" id="deleteModalLabel">Удаление пользователя</h5>
-                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                <span aria-hidden="true">&times;</span>
-                                            </button>
-                                        </div>
-                                        <form class="modal-body">
-                                            <div class="row">
-                                                <div class="col-3"></div>
-                                                <div class="col-6">
-                                                    <input type="hidden" th:name="id" th:value="${user.id}"/>
-                                                    <div class="form-group">
-                                                        <p class="text-center my-0"><strong> Имя </strong></p>
-                                                        <input class="form-control mt-0" placeholder="Имя" type="text"
-                                                               th:value="${user.name}" name="name" readonly/>
-                                                    </div>
-                                                    <div class="form-group align-items-center justify-content-center">
-                                                        <p class="text-center my-0"><strong> Фамилия </strong></p>
-                                                        <input class="form-control mt-0" placeholder="Фамилия"
-                                                               type="text" th:value="${user.surname}" name="surname"
-                                                               readonly/>
-                                                    </div>
-                                                    <div class="form-group">
-                                                        <p class="text-center my-0"><strong> Электронная почта </strong>
-                                                        </p>
-                                                        <input class="form-control mt-0" placeholder="user@email.com"
-                                                               type="text" th:value="${user.username}"
-                                                               name="email" readonly/>
-                                                    </div>
-                                                    <div class="form-group">
-                                                        <p class="text-center my-0"><strong> Роль</strong></p>
-                                                        <select multiple class="form-control p-0 m-0"
-                                                                th:id="${'roles'+roles.size()}" name="roles" readonly>
-                                                            <option
-                                                                    th:each="role:${roles}" th:value="${role.id}"
-                                                                    th:text="${role.authority.substring(5)}" readonly>
-                                                            </option>
-                                                        </select>
-                                                    </div>
-                                                </div>
-                                                <div class="col-3"></div>
-                                            </div>
-                                        </form>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">
-                                                Закрыть
-                                            </button>
-                                            <button type="submit" class="btn btn-danger">Удалить</button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </form>
-                        </div>
-                    </td>
-                </tr>
-                </tbody>
+                <tbody id="table"></tbody>
             </table>
         </div>
     </div>
 </div>
 
+<script src=/allUsers.js defer></script>
+<script src=/changeUserModal.js defer></script>
+<script src=/deleteUserModal.js defer></script>
+<script src=/changeUserAction.js defer></script>
+<script src=/deleteUserAction.js defer></script>
+
+<div class="modal fade" id="changeModal" tabindex="-1" role="dialog"
+     aria-labelledby="changeModalLabel" aria-hidden="true"
+     th:action="@{/admin/saveUser}" th:method="patch">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="changeModalLabel">Корректировка данных
+                    пользователя</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form class="modal-body">
+                <div class="row">
+                    <div class="col-3"></div>
+                    <div id="changing" class="col-6">
+                    </div>
+                    <div class="col-3"></div>
+                </div>
+            </form>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                    Закрыть
+                </button>
+                <button id="changeConfirm" type="submit" class="btn btn-primary" data-dismiss="modal">Сохранить</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog"
+      aria-labelledby="deleteModalLabel" aria-hidden="true"
+      th:action="@{/admin/deleteUser}" th:method="delete">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteModalLabel">Удаление пользователя</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form class="modal-body">
+                <div class="row">
+                    <div class="col-3"></div>
+                    <div id="deleting" class="col-6">
+                    </div>
+                    <div class="col-3"></div>
+                </div>
+            </form>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                    Закрыть
+                </button>
+                <button id="deleteConfirm" type="submit" class="btn btn-danger" data-dismiss="modal">Удалить</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 </body>
 </html>
-
 

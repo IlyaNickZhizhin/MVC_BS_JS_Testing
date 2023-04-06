@@ -36,7 +36,7 @@ public class WebAdminController {
         return "admin";
     }
 
-    @GetMapping (value = "/admin/addNewUser")
+    @GetMapping (value = "/admin/addNewUser4DB")
     public String addNewUser(Model model, Authentication au) {
         User user = new User();
         model.addAttribute("user", user);

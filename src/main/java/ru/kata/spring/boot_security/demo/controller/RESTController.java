@@ -26,6 +26,7 @@ public class RESTController {
     public User getUserById(@PathVariable("id") int id) {
         return userService.getUserById(id);
     }
+
     @PutMapping("/users")
     public User saveUser(@RequestBody User user) {
         userService.saveUser(user);

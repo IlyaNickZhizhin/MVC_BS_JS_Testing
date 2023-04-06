@@ -17,28 +17,26 @@ TestUserDataLoader {
 
     private final UserService userService;
     private final RoleService roleService;
-    private final BCryptPasswordEncoder encoder;
 
     @Autowired
     public TestUserDataLoader(UserService userService, RoleService roleService, BCryptPasswordEncoder encoder) {
         this.userService = userService;
         this.roleService = roleService;
-        this.encoder = encoder;
     }
 
     @PostConstruct
     public void init() {
         if (userService.getAllUsers().size()==0) {
             userService.saveUser(new User("Ilya", "Zhizhin", "ilya@mail.ru",
-                    encoder.encode("ilya"), Set.of(new Role("ROLE_ADMIN"))));
+                 "ilya", Set.of(new Role("ROLE_ADMIN"))));
             userService.saveUser(new User("Irina", "Zhizhina", "irina@mail.ru",
-                    encoder.encode("irina"), Set.of(new Role("ROLE_USER"))));
+                    "irina", Set.of(new Role("ROLE_USER"))));
             userService.saveUser(new User("Stepan", "Pozdeev", "stepan@mail.ru",
-                    encoder.encode("stepan"), Set.copyOf(roleService.getAllRoles())));
+                    "stepan", Set.copyOf(roleService.getAllRoles())));
             userService.saveUser(new User("Michail", "Pozdeev", "misha@mail.ru",
-                    encoder.encode("misha"), Set.of(roleService.getRoleById(2))));
+                    "misha", Set.of(roleService.getRoleById(2))));
             userService.saveUser(new User("Mark", "Zhizhin", "mark@mail.ru",
-                    encoder.encode("mark"), Set.of(roleService.getRoleById(1))));
+                    "mark", Set.of(roleService.getRoleById(1))));
         }
     }
 }

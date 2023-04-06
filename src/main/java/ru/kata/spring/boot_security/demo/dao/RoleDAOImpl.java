@@ -22,17 +22,8 @@ public class RoleDAOImpl implements RoleDAO{
     }
 
     @Override
-    public void saveRole(Role role) {
-        entityManager.merge(role);
-    }
-
-    @Override
     public Role getRoleById(int id) {
         return entityManager.find(Role.class, id);
     }
 
-    @Override
-    public void deleteRole(int id) {
-        entityManager.createQuery("delete from Role where id =" + id).executeUpdate();
-    }
 }

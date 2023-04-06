@@ -48,14 +48,14 @@
       </form>
     </nav>
   </div>
-  <div class="col-sm-10 p-4 bg-light text-dark border">
+  <div class="container shadow-lg p3 bg-body rounded">
     <h2 style="font-weight: bolder">Пользовательская информационная панель</h2>
-    <div class="row p-2 border bg-light">
+    <div cclass="container shadow-lg p3 mb-5 bg-body rounded">
       <h5 style="font-weight: bold">
         О пользователе
       </h5>
     </div>
-    <div class="row border bg-white">
+    <div class="container shadow-lg p3 mb-5 bg-body rounded">
       <table class="table bg-white table-striped table-borderless border-top w-90">
         <thead>
         <tr>
@@ -66,19 +66,50 @@
           <th>Роль</th>
         </tr>
         </thead>
-        <tbody>
-        <tr>
-          <td th:text="${current.id}"></td>
-          <td th:text="${current.name}"></td>
-          <td th:text="${current.surname}"></td>
-          <td th:text="${current.username}"></td>
-          <td th:text="${current.authorities}"></td>
+        <input type="hidden" id="userId" th:value="${current.id}"/>
+        <tbody id="data">
+          <tr>
+            <td th:text="${current.getId()}"></td>
+            <td th:text="${current.name}"></td>
+            <td th:text="${current.surname}"></td>
+            <td th:text="${current.username}"></td>
+            <td th:text="${current.authorities}"></td>
+          </tr>
         </tbody>
       </table>
     </div>
   </div>
 </div>
 
+<script>
+
+let url = 'http://localhost:8080/api/users/'+document.getElementById('userId').value;
+console.log(url);
+fetch(url)
+        .then(response => response.json())
+        .then(data => savingData(data))
+        .catch(error => console.log(error));
+
+const savingData = (data) => {
+  console.log(data)
+  let roles = data.authorities;
+  let bodyRolesString = '';
+  for (let i = 0; i < roles.length; i++) {
+    bodyRolesString += roles[i].authority.substring(5);
+    bodyRolesString += i<(roles.length-1) ? ", " : "";
+  }
+  let body = `<tr>
+            <td>${data.id}</td>
+            <td>${data.name}</td>
+            <td>${data.surname}</td>
+            <td>${data.username}</td>
+            <td>${bodyRolesString}</td>
+          </tr>`
+  document.getElementById('data').innerHTML = body;
+}
+
+
+</script>
 </body>
 </html>
 

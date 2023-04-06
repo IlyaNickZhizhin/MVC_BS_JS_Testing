@@ -29,6 +29,7 @@ public class UserDAOImpl implements UserDAO{
 
     @Override
     public User getUserById(int id) {
+        System.out.println(entityManager.find(User.class, id));
         return entityManager.find(User.class, id);
     }
 
@@ -37,13 +38,6 @@ public class UserDAOImpl implements UserDAO{
         Query query = entityManager.createQuery("delete from User where id = :userId");
         query.setParameter("userId", id);
         query.executeUpdate();
-    }
-
-    @Override
-    public User getUserByEmail(String email) {
-       return entityManager.createQuery("from User where email = :email", User.class)
-                .setParameter("email", email)
-                .getSingleResult();
     }
 
     @Override

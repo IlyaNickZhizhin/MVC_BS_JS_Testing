@@ -20,7 +20,7 @@ public class WebUserController {
     @GetMapping("/user/")
     public String showUserById(Authentication au,
                                Model model) {
-        model.addAttribute("user", au.getPrincipal());
+        model.addAttribute("current", au.getPrincipal());
         return "user";
     }
 }

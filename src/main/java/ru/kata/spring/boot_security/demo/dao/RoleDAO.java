@@ -7,10 +7,6 @@ public interface RoleDAO {
 
     List<Role> getAllRoles();
 
-    void saveRole(Role role);
-
     Role getRoleById(int id);
-
-    void deleteRole(int id);
 
 }
