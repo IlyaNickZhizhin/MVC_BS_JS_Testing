@@ -7,6 +7,7 @@
         integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
   <meta charset="UTF-8"/>
   <title>Панель администратора</title>
+  <script src=/navBar.js></script>
 </head>
 <body>
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
@@ -21,11 +22,7 @@
 
 <nav class="navbar navbar-dark bg-dark text-white fixed-top"
      style="display: flex; justify-content: space-between; align-items: center">
-  <div>
-    <span th:text="${current.username}" style="font-weight: bolder"></span>
-    <span> with roles: </span>
-    <span th:text="${current.authorities}"></span>
-  </div>
+  <div id="navbar"></div>
   <div>
     <form th:action="@{/logout}" th:method="post">
       <a href="/logout" th:method="post" style="color: grey">Logout</a>
@@ -50,7 +47,7 @@
   </div>
   <div class="container shadow-lg p3 bg-body rounded">
     <h2 style="font-weight: bolder">Пользовательская информационная панель</h2>
-    <div cclass="container shadow-lg p3 mb-5 bg-body rounded">
+    <div class="container shadow-lg p3 mb-5 bg-body rounded">
       <h5 style="font-weight: bold">
         О пользователе
       </h5>
@@ -66,16 +63,7 @@
           <th>Роль</th>
         </tr>
         </thead>
-        <input type="hidden" id="userId" th:value="${current.id}"/>
-        <tbody id="data">
-          <tr>
-            <td th:text="${current.getId()}"></td>
-            <td th:text="${current.name}"></td>
-            <td th:text="${current.surname}"></td>
-            <td th:text="${current.username}"></td>
-            <td th:text="${current.authorities}"></td>
-          </tr>
-        </tbody>
+        <tbody id="data"></tbody>
       </table>
     </div>
   </div>
@@ -83,9 +71,7 @@
 
 <script>
 
-let url = 'http://localhost:8080/api/users/'+document.getElementById('userId').value;
-console.log(url);
-fetch(url)
+fetch('/api/user')
         .then(response => response.json())
         .then(data => savingData(data))
         .catch(error => console.log(error));
@@ -98,14 +84,14 @@ const savingData = (data) => {
     bodyRolesString += roles[i].authority.substring(5);
     bodyRolesString += i<(roles.length-1) ? ", " : "";
   }
-  let body = `<tr>
+  document.getElementById('data').innerHTML =
+          `<tr>
             <td>${data.id}</td>
             <td>${data.name}</td>
             <td>${data.surname}</td>
             <td>${data.username}</td>
             <td>${bodyRolesString}</td>
-          </tr>`
-  document.getElementById('data').innerHTML = body;
+          </tr>`;
 }
 
 

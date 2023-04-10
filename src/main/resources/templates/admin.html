@@ -7,25 +7,12 @@
           integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <meta charset="UTF-8"/>
     <title>Панель администратора</title>
+    <script src=/navBar.js></script>
 </head>
 <body>
-<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
-        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
-        crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
-        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
-        crossorigin="anonymous"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
-        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
-        crossorigin="anonymous"></script>
-
 <nav class="navbar navbar-dark bg-dark text-white fixed-top"
      style="display: flex; justify-content: space-between; align-items: center">
-    <div>
-        <span th:text="${current.username}" style="font-weight: bolder"></span>
-        <span> with roles: </span>
-        <span th:text="${current.authorities}"></span>
-    </div>
+    <div id="navbar">    </div>
     <div>
         <form th:action="@{/logout}" th:method="post">
             <a href="/logout" th:method="post" style="color: grey">Logout</a>
@@ -50,49 +37,21 @@
     </div>
     <div class="container shadow-lg p3 bg-body rounded">
         <h2 style="font-weight: bolder">Панель администратора</h2>
-
-        <ui class="nav nav-tabs">
-            <li class="nav-item">
-                <a class="nav-link active" href="/admin" th:method="get" style="color:black">Пользователи</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="/admin/addNewUser4DB" th:method="get" style="color:blue">Добавить</a>
-            </li>
-        </ui>
-
-        <div class="container shadow-lg p3 bg-body rounded">
-            <h5 style="font-weight: bold">
-                Все пользователи
-            </h5>
-        </div>
-        <div class="container shadow-lg p3 mb-5 bg-body rounded">
-            <table class="table bg-white table-striped table-borderless border-top w-90">
-                <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Имя</th>
-                    <th>Фамилия</th>
-                    <th>Электронная почта</th>
-                    <th>Роль</th>
-                    <th>Изменить</th>
-                    <th>Удалить</th>
-                </tr>
-                </thead>
-                <tbody id="table"></tbody>
-            </table>
-        </div>
+        <div id="adminPanel"></div>
     </div>
 </div>
 
-<script src=/allUsers.js defer></script>
-<script src=/changeUserModal.js defer></script>
-<script src=/deleteUserModal.js defer></script>
-<script src=/changeUserAction.js defer></script>
-<script src=/deleteUserAction.js defer></script>
+<script src=/allUsers.js></script>
+<script src=/addNewUserWindow.js></script>
+<script src=/addNewUserAction.js></script>
+<script src=/redirectingToStart.js></script>
+<script src=/changeUserModal.js></script>
+<script src=/deleteUserModal.js></script>
+<script src=/changeUserAction.js></script>
+<script src=/deleteUserAction.js></script>
 
 <div class="modal fade" id="changeModal" tabindex="-1" role="dialog"
-     aria-labelledby="changeModalLabel" aria-hidden="true"
-     th:action="@{/admin/saveUser}" th:method="patch">
+     aria-labelledby="changeModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -114,15 +73,15 @@
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">
                     Закрыть
                 </button>
-                <button id="changeConfirm" type="submit" class="btn btn-primary" data-dismiss="modal">Сохранить</button>
+                <button id="changeConfirm" type="submit" class="btn btn-primary"
+                        onclick="changeUserAction()" data-dismiss="modal">Сохранить</button>
             </div>
         </div>
     </div>
 </div>
 
 <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog"
-      aria-labelledby="deleteModalLabel" aria-hidden="true"
-      th:action="@{/admin/deleteUser}" th:method="delete">
+      aria-labelledby="deleteModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -143,13 +102,23 @@
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">
                     Закрыть
                 </button>
-                <button id="deleteConfirm" type="submit" class="btn btn-danger" data-dismiss="modal">Удалить</button>
+                <button id="deleteConfirm" type="submit" class="btn btn-danger"
+                        onclick="deleteUserAction()" data-dismiss="modal">
+                    Удалить</button>
             </div>
         </div>
     </div>
 </div>
 
-
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+        crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"></script>
 </body>
 </html>
 

@@ -1,9 +1,5 @@
-const form = document.getElementById(`addUserForm`);
-console.log("Adding was started")
-form.addEventListener(`submit`, adding);
-
 function adding(event) {
-    console.log("Change func")
+    const form = document.getElementById(`addUserForm`);
     event.preventDefault();
     const formData = new FormData(form);
     class Role {
@@ -13,10 +9,10 @@ function adding(event) {
         }
     }
     let currentRoles = [];
-    const roles = Array.from(formData.getAll('roles'))
+    const roles4add = Array.from(formData.getAll('roles'))
 
-    for(let i = 0; i<roles.length; i++) {
-        const id = roles[i];
+    for(let i = 0; i<roles4add.length; i++) {
+        const id = roles4add[i];
         const authority = id == 1 ? `ROLE_ADMIN` : `ROLE_USER`
         currentRoles.push(new Role(id, authority))
     }
@@ -36,13 +32,10 @@ function adding(event) {
     })
         .then(response => response.json())
         .then(data => {
-            console.log('ПОЛЬЗОВАТЕЛЬ ДОБАВЛЕН' + data.value)
+            console.log('ПОЛЬЗОВАТЕЛЬ ' + data.valueOf().username + ' ДОБАВЛЕН' )
             form.reset();
-            window.location.href = 'http://localhost:8080/admin';
         })
         .catch(error => {
-            console.log("ОШИБКА, ПОЛЬЗОВАТЕЛЬ НЕ ДОБАВЛЕН" + error.message());
-        });
+            console.log("ОШИБКА ДОБАВЛЕНИЯ ПОЛЬЗОВАТЕЛЯ " + error.message);
+        }).finally( ()=>{redirectingToStart();});
 }
-
-console.log("Adding was ended")

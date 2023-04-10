@@ -1,6 +1,4 @@
-console.log("delete loading...")
-$(document).on('click', '#deleteButton', function() {
-    let id = $(this).attr('data-userID');
+function drawDeleteModal(id) {
     console.log('Кнопка УДАЛИТЬ пользователя №' + id + ' нажата!');
     let url = 'http://localhost:8080/api/users/' + id;
     let body = '';
@@ -9,12 +7,10 @@ $(document).on('click', '#deleteButton', function() {
         .then(data => deletingData(data))
         .catch(error => console.log(error))
     const deletingData = (data) => {
-        console.log(data)
         let rolesID =[]
         data.authorities.forEach((id)=>{
             rolesID.push(id.id);
         })
-        console.log(rolesID)
         body += `
         <form id="deleteUserForm" class="needs-validation">
              <input id='id' type="hidden" value="${data.id}">
@@ -46,7 +42,4 @@ $(document).on('click', '#deleteButton', function() {
         </form>`
         document.getElementById('deleting').innerHTML = body;
     }
-
-});
-
-console.log("delete ready")
+}

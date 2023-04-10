@@ -1,5 +1,5 @@
-$(document).on('click', '#changeButton', function() {
-    let id = $(this).attr('data-userID');
+function drawChangeModal(id) {
+
     console.log('Кнопка ИЗМЕНИТЬ пользователя №' + id + ' нажата!');
     let url = 'http://localhost:8080/api/users/' + id;
     let body = ''
@@ -15,7 +15,6 @@ $(document).on('click', '#changeButton', function() {
              rolesID.push(id.id);
          })
 
-        console.log(rolesID)
         body += `
         <form id="addUserForm" class="needs-validation">
              <input id='id' type="hidden" value="${data.id}">
@@ -47,4 +46,4 @@ $(document).on('click', '#changeButton', function() {
         </form>`
         document.getElementById('changing').innerHTML = body;
     }
-});
+}

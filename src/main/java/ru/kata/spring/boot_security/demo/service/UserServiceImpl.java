@@ -29,10 +29,8 @@ public class UserServiceImpl implements UserService {
     @Transactional
     @Override
     public void saveUser(User user) {
-        System.out.println("4SAVING"+user);
         int id = user.getId();
         User existingUser = userDAO.getUserById(id);
-        System.out.println("EXISTING"+existingUser);
         if (existingUser == null) {
             String hashedPass = passwordEncoder.encode(user.getPassword());
             user.setPassword(hashedPass);

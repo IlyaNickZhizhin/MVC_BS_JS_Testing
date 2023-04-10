@@ -1,5 +1,4 @@
-console.log("changing5.8");
-$(document).on('click', '#changeConfirm', function () {
+function changeUserAction() {
     let id = document.getElementById('id').value;
     let tr = document.getElementById('tr№'+id);
     // получаем массив int из формы select по id="roles" и name="roles4change"
@@ -34,13 +33,11 @@ $(document).on('click', '#changeConfirm', function () {
         .then(response => response.json())
         .then(data => {
             console.log('ПОЛЬЗОВАТЕЛЬ №' + id + 'ИЗМЕНЕН')
-            console.log(data);
             let bodyRolesString = '';
             for (let a = 0; a < data.authorities.length; a++) {
                 bodyRolesString += data.authorities[a].authority.substring(5);
                 bodyRolesString += a<(data.authorities.length-1) ? ", " : "";
             }
-            console.log(bodyRolesString);
             tr.innerHTML = `
                 <td id="id:${data.id}">${data.id}</td>
                 <td id="name:${data.id}">${data.name}</td>
@@ -61,37 +58,8 @@ $(document).on('click', '#changeConfirm', function () {
                         Удалить
                     </button>
                 </td>`
-            console.log(tr.innerHTML);
         })
         .catch(error => {
-            console.log("ОШИБКА, ПОЛЬЗОВАТЕЛЬ №" + id + "НЕ ИЗМЕНЕН" + error.message());
+            console.log("ОШИБКА, ИЗМЕНЕНИЯ ДАННЫХ ПОЛЬЗОВАТЕЛЯ №" + id + " " + error.message);
         });
-});
-
-/*    let bodyRolesString = '';
-    for (let a = 0; a < data.roles.length; a++) {
-    bodyRolesString += data.roles[a].authority.substring(5);
-    bodyRolesString += a<(data.roles.length-1) ? ", " : "";
 }
-console.log(bodyRolesString);
-tr.innerHTML = `
-    <td>${user.id}</td>
-    <td>${user.name}</td>
-    <td>${user.surname}</td>
-    <td>${user.email}</td>
-    <td>${bodyRolesString}</td>
-    <td>
-        <div class="all-classes-container">
-        <button id="changeButton" type="button" class="btn btn-primary btn-sm" data-toggle="modal"
-                data-target="#changeModal" data-userID="${data[i].id}">
-            Изменить
-        </button>
-    </div>
-    </td>
-    <td>
-        <button id="deleteButton" type="button" class="btn btn-danger btn-sm" data-toggle="modal"
-                data-target="#deleteModal" data-userID="${data[i].id}">
-            Удалить
-        </button>
-    </td>
-    `*/
